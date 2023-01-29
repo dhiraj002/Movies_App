@@ -1,3 +1,10 @@
 .flex{
     display: flex;
+    margin-inline: 2rem;
+    align-items: flex-start;
+    
+}
+
+h2{
+    margin-left: 2rem;
 }

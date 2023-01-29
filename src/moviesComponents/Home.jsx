@@ -1,6 +1,7 @@
 import React from 'react'
 import './Header.css';
-import "./Banner.css"
+import "./Banner.css";
+import "./MoviesList.css"
 
 
 function Home() {
@@ -8,6 +9,7 @@ function Home() {
   <>
        <Header></Header>
        <Banner></Banner>
+       <MoviesList></MoviesList>
   </>
   )
 }
@@ -51,17 +53,54 @@ function Banner(){
            <h2>Loading....</h2> :
            <>
            <h2>{firstMovie.original_title}</h2>
-           <img src={"https://image.tmdb.org/t/p/original"+firstMovie.backdrop_path} alt="" className='poster_img'/>
+           <img src={"https://image.tmdb.org/t/p/original"+firstMovie.backdrop_path} alt="" className='banner_img'/>
            </>
-           
-        
-        
-        }
+           }
         
         </>
     )
 }
 
+function MoviesList(){
+
+    let[Movie,settMovie]=React.useState("");
+
+    React.useState(async function(){
+        let response=await fetch(`https://api.themoviedb.org/3/trending/movie/week?api_key=f429223fad1e8c839b551f454cd6b614`);
+
+        let data=await response.json();
+        
+        let movie=data.results;
+        // console.log(movies[0]);
+        
+        settMovie(movie)
+    },[]);
+
+    return(
+        <>
+            <h2>Trending Movies</h2>
+
+            {Movie===""?
+           <h2>Loading Movies....</h2> :
+           <div className='trending_Box'>
+             { Movie.map((movieobj,idx)=>{
+                return(
+                    <div key={idx} className="poster_box">
+                        <h2>{movieobj.original_title}</h2>
+
+                        <img src={"https://image.tmdb.org/t/p/w500"+movieobj.poster_path} alt="" className='poster_img'/>
+
+                        
+                        
+                    </div>
+                )
+
+              })}
+           </div>
+           }
+        </>
+    ) 
+}
 
 
 
