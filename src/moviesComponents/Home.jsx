@@ -34,8 +34,10 @@ function Banner(){
     let[firstMovie,setFirstMovie]=React.useState("");
 
     React.useState(async function(){
+        //it is used to make request
         let response=await fetch(`https://api.themoviedb.org/3/trending/movie/week?api_key=f429223fad1e8c839b551f454cd6b614`);
 
+        //response will come in buffer we have to convert it into json
         let data=await response.json();
         console.log("data",data);
         let movies=data.results;
@@ -63,6 +65,13 @@ function Banner(){
 
 function MoviesList(){
 
+    let[value,setValue]=React.useState("");
+    function setText(e){
+      let newValue=e.target.value;
+      setValue(newValue);
+    }
+
+
     let[Movie,settMovie]=React.useState("");
 
     React.useState(async function(){
@@ -76,14 +85,32 @@ function MoviesList(){
         settMovie(movie)
     },[]);
 
+    function filterLogic(searchText,moviesArray){
+        let filteredMovieArray=[];
+        for(let i=0;i<moviesArray.length;i++){
+            let upperSearchText=searchText.toUpperCase();
+            let movieName=moviesArray[i].original_title;
+            let upperText=movieName.toUpperCase();
+            let ans=upperText.includes(upperSearchText);
+
+            if(ans==true){
+                filteredMovieArray.push(moviesArray[i]);
+            }
+        }
+        return filteredMovieArray;
+    }
+
+   let searchedMovie= filterLogic(value,Movie);
+
     return(
         <>
             <h2>Trending Movies</h2>
+            <input type="text" value={value} onChange={setText}/>
 
             {Movie===""?
            <h2>Loading Movies....</h2> :
            <div className='trending_Box'>
-             { Movie.map((movieobj,idx)=>{
+             { searchedMovie.map((movieobj,idx)=>{
                 return(
                     <div key={idx} className="poster_box">
                         <h2>{movieobj.original_title}</h2>
