@@ -1,8 +1,9 @@
 import React from 'react'
+import Header from './Header'
 
 function Favourites() {
   return (
-    <h1>Favourites</h1>
+   <Header></Header>
   )
 }
 

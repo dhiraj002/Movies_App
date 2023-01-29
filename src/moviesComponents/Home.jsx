@@ -1,4 +1,5 @@
 import React from 'react'
+import Header from "./Header"
 import './Header.css';
 import "./Banner.css";
 import "./MoviesList.css"
@@ -39,20 +40,6 @@ function Home() {
   )
 }
 
-
-function Header(){
-    return(
-        <>
-            <div className='flex'>
-            <img src="https://img.icons8.com/external-bearicons-blue-bearicons/50/000000/external-movie-call-to-action-bearicons-blue-bearicons.png" alt="" />
-
-            <h2>Movies</h2>
-            <h2>Favorites</h2>
-            </div> 
-
-        </>
-    )
-}
 
 function Banner(){
 
