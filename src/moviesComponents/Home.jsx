@@ -2,14 +2,39 @@ import React from 'react'
 import './Header.css';
 import "./Banner.css";
 import "./MoviesList.css"
+import "./Pagination.css"
 
 
 function Home() {
+    
+    let[pageNo,changePageno]=React.useState(1);
+
+   function inc(){
+    changePageno(function (prevState){
+        return prevState+1
+    })
+   }
+
+   function dec(){
+    if(pageNo==1){return}
+    changePageno(function (prevState){
+        return prevState-1
+    })
+   }
+
   return (
   <>
        <Header></Header>
        <Banner></Banner>
-       <MoviesList></MoviesList>
+       <MoviesList pageNo={pageNo}></MoviesList>
+
+       <div className='pagination'>
+        <button className='btn'onClick={dec}>Previous</button>
+        <div className='text'>{pageNo}</div>
+        <button className='btn'onClick={inc}>Next</button>
+        
+        </div>
+       
   </>
   )
 }
@@ -33,7 +58,9 @@ function Banner(){
 
     let[firstMovie,setFirstMovie]=React.useState("");
 
-    React.useState(async function(){
+    React.useEffect( function fn(){
+
+        async function fetchData(){
         //it is used to make request
         let response=await fetch(`https://api.themoviedb.org/3/trending/movie/week?api_key=f429223fad1e8c839b551f454cd6b614`);
 
@@ -44,12 +71,14 @@ function Banner(){
         // console.log(movies[0]);
         
         setFirstMovie(movies[0])
+        }
+        fetchData();
     },[]);
  
 
     return(
         <>
-           <h1>Banner</h1>
+           {/* <h1>Banner</h1> */}
 
            {firstMovie===""?
            <h2>Loading....</h2> :
@@ -63,7 +92,7 @@ function Banner(){
     )
 }
 
-function MoviesList(){
+function MoviesList(props){
 
     let[value,setValue]=React.useState("");
     function setText(e){
@@ -74,16 +103,21 @@ function MoviesList(){
 
     let[Movie,settMovie]=React.useState("");
 
-    React.useState(async function(){
-        let response=await fetch(`https://api.themoviedb.org/3/trending/movie/week?api_key=f429223fad1e8c839b551f454cd6b614`);
+    React.useEffect(function fn(){
 
-        let data=await response.json();
-        
-        let movie=data.results;
-        // console.log(movies[0]);
-        
-        settMovie(movie)
-    },[]);
+        async function fetchdata(){
+            let response=await fetch(`https://api.themoviedb.org/3/trending/movie/week?api_key=f429223fad1e8c839b551f454cd6b614&page=`+props.pageNo);
+
+            let data=await response.json();
+            
+            let movie=data.results;
+            // console.log(movies[0]);
+            
+            settMovie(movie)
+
+        }
+       fetchdata();
+    },[props.pageNo]);
 
     function filterLogic(searchText,moviesArray){
         let filteredMovieArray=[];
@@ -128,6 +162,10 @@ function MoviesList(){
         </>
     ) 
 }
+
+
+
+
 
 
 

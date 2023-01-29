@@ -1,18 +1,23 @@
 .trending_Box{
     display: flex;
     flex-wrap:wrap ;
+    margin-inline-start:1rem ;
+}
+
+.trending_Box>*{
+    text-align: center;
 }
 
 .poster_box{
-    width: 30%;
+    width: 20%;
     height: 30rem;
-    border: 1px solid gray;
+    /* border: 1px solid gray; */
     margin-bottom:1rem ;
     
 
 }
 
 .poster_img{
-    width: 100%;
+    width: 80%;
    
 }
