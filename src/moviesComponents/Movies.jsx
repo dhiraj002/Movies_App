@@ -1,9 +1,15 @@
 import React from 'react'
+import Favourites from './Favourites'
+import Home from './Home'
 
 function Movies() {
   return (
-    <div>Movies</div>
+      <>
+           <Home></Home>
+           {/* <Favourites></Favourites> */}
+      </>
   )
+
 }
 
 export default Movies

@@ -1,3 +1,4 @@
+// type rfce to autocomplete
 
 import './App.css';
 import Movies from './moviesComponents/Movies';
