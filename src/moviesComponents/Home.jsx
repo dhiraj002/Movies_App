@@ -1,9 +1,11 @@
 import React from 'react'
-import Header from "./Header"
-import './Header.css';
-import "./Banner.css";
-import "./MoviesList.css"
-import "./Pagination.css"
+import Header from "./HeaderComponent/Header"
+import Banner from './BannerComponent/Banner';
+import MovieList from './MovieListComponent/MovieList';
+import './HeaderComponent/Header.css';
+import "./BannerComponent/Banner.css";
+import "./MovieListComponent/MoviesList.css"
+import "./MovieListComponent/Pagination.css"
 
 
 function Home() {
@@ -27,7 +29,7 @@ function Home() {
   <>
        <Header></Header>
        <Banner></Banner>
-       <MoviesList pageNo={pageNo}></MoviesList>
+       <MovieList pageNo={pageNo}></MovieList>
 
        <div className='pagination'>
         <button className='btn'onClick={dec}>Previous</button>
@@ -39,123 +41,5 @@ function Home() {
   </>
   )
 }
-
-
-function Banner(){
-
-    let[firstMovie,setFirstMovie]=React.useState("");
-
-    React.useEffect( function fn(){
-
-        async function fetchData(){
-        //it is used to make request
-        let response=await fetch(`https://api.themoviedb.org/3/trending/movie/week?api_key=f429223fad1e8c839b551f454cd6b614`);
-
-        //response will come in buffer we have to convert it into json
-        let data=await response.json();
-        console.log("data",data);
-        let movies=data.results;
-        // console.log(movies[0]);
-        
-        setFirstMovie(movies[0])
-        }
-        fetchData();
-    },[]);
- 
-
-    return(
-        <>
-           {/* <h1>Banner</h1> */}
-
-           {firstMovie===""?
-           <h2>Loading....</h2> :
-           <>
-           <h2>{firstMovie.original_title}</h2>
-           <img src={"https://image.tmdb.org/t/p/original"+firstMovie.backdrop_path} alt="" className='banner_img'/>
-           </>
-           }
-        
-        </>
-    )
-}
-
-function MoviesList(props){
-
-    let[value,setValue]=React.useState("");
-    function setText(e){
-      let newValue=e.target.value;
-      setValue(newValue);
-    }
-
-
-    let[Movie,settMovie]=React.useState("");
-
-    React.useEffect(function fn(){
-
-        async function fetchdata(){
-            let response=await fetch(`https://api.themoviedb.org/3/trending/movie/week?api_key=f429223fad1e8c839b551f454cd6b614&page=`+props.pageNo);
-
-            let data=await response.json();
-            
-            let movie=data.results;
-            // console.log(movies[0]);
-            
-            settMovie(movie)
-
-        }
-       fetchdata();
-    },[props.pageNo]);
-
-    function filterLogic(searchText,moviesArray){
-        let filteredMovieArray=[];
-        for(let i=0;i<moviesArray.length;i++){
-            let upperSearchText=searchText.toUpperCase();
-            let movieName=moviesArray[i].original_title;
-            let upperText=movieName.toUpperCase();
-            let ans=upperText.includes(upperSearchText);
-
-            if(ans==true){
-                filteredMovieArray.push(moviesArray[i]);
-            }
-        }
-        return filteredMovieArray;
-    }
-
-   let searchedMovie= filterLogic(value,Movie);
-
-    return(
-        <>
-            <h2>Trending Movies</h2>
-            <input type="text" value={value} onChange={setText}/>
-
-            {Movie===""?
-           <h2>Loading Movies....</h2> :
-           <div className='trending_Box'>
-             { searchedMovie.map((movieobj,idx)=>{
-                return(
-                    <div key={idx} className="poster_box">
-                        <h2>{movieobj.original_title}</h2>
-
-                        <img src={"https://image.tmdb.org/t/p/w500"+movieobj.poster_path} alt="" className='poster_img'/>
-
-                        
-                        
-                    </div>
-                )
-
-              })}
-           </div>
-           }
-        </>
-    ) 
-}
-
-
-
-
-
-
-
-
 
 export default Home;
