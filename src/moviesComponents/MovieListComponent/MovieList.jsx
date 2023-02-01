@@ -16,7 +16,16 @@ function MovieList(props){
             let movieobj=Movie[i];
             if(movieobj.id==movieId){
                 //copy fav to newFav
-                let newFav=[...favourites,movieobj];
+                let newFav=[...favourites];
+                newFav.push(movieobj);
+                //localStorage add
+                let prevStrArray=localStorage.getItem("favourites")||"[]";
+                let prevArry=JSON.parse(prevStrArray)
+                prevArry.push(movieobj);
+                prevArry=JSON.stringify(prevArry);
+                localStorage.setItem("favourites",prevArry);
+
+
                 setFavourites(newFav);
                 break;
             }
@@ -27,6 +36,15 @@ function MovieList(props){
         let filterFav=favourites.filter((movieobj)=>{
                return movieobj.id!=movieId;
         })
+        //remove from local storage
+        let prevStrArray=localStorage.getItem("favourites")||"[]";
+                let prevArry=JSON.parse(prevStrArray)
+                prevArry=prevArry.filter((movieobj)=>{
+                    return movieobj.id!=movieId;
+                })
+                prevArry=JSON.stringify(prevArry);
+                localStorage.setItem("favourites",prevArry);
+
          setFavourites(filterFav);
     }
 
@@ -57,6 +75,12 @@ function MovieList(props){
        fetchdata();
     },[props.pageNo]);
 
+    React.useEffect(function(){
+        let prevStrArray=localStorage.getItem("favourites")||"[]";
+        let prevArry=JSON.parse(prevStrArray);
+        setFavourites(prevArry);
+    },[])
+
    
 
    let searchedMovie= filterLogic(value,Movie);
@@ -78,10 +102,10 @@ function MovieList(props){
 
                        {
                           checkContainFav(movieobj.id)?
-                          <i class="fa-sharp fa-solid fa-xmark" onClick={()=>{deleteFavHandle(movieobj.id)}}></i>:
+                          <i className="fa-sharp fa-solid fa-xmark" onClick={()=>{deleteFavHandle(movieobj.id)}}></i>:
 
 
-                          <i class="fa-solid fa-face-grin-hearts" onClick={()=>{setToFavHandler(movieobj.id)}}></i>
+                          <i className="fa-solid fa-face-grin-hearts" onClick={()=>{setToFavHandler(movieobj.id)}}></i>
 
 
                        }
