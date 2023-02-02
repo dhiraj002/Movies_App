@@ -29,7 +29,7 @@ function Banner(){
            {firstMovie===""?
            <h2>Loading....</h2> :
            <>
-           <h2>{firstMovie.original_title}</h2>
+           {/* <h2>{firstMovie.original_title}</h2> */}
            <img src={"https://image.tmdb.org/t/p/original"+firstMovie.backdrop_path} alt="" className='banner_img'/>
            </>
            }

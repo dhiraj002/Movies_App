@@ -88,7 +88,7 @@ function MovieList(props){
     return(
         <>
             <h2>Trending Movies</h2>
-            <input type="text" value={value} onChange={setText}/>
+            <input type="text" value={value} onChange={setText} placeholder="Search"/>
 
             {Movie===""?
            <h2>Loading Movies....</h2> :

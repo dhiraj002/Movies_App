@@ -5,6 +5,7 @@ function Favourites() {
   let [favourites,setFavourites]=React.useState([]);
   let [ratingOrder,setRatingOrder]=React.useState(null); 
   let [popularityOrder,setPopularityOrder]=React.useState(null);
+  const [genres, setGenres] = React.useState([])
 
   //page no. change
   let [currPage,setPage]=React.useState(1);
@@ -24,7 +25,31 @@ function Favourites() {
     let newValue=e.target.value;
     setElems(newValue);
   }
- 
+
+  let genreids = {
+    28: 'Action',
+    12: 'Adventure',
+    16: 'Animation', 35: 'Comedy', 80: 'Crime', 99: 'Documentary', 18: 'Drama', 10751: 'Family',
+    14: 'Fantasy', 36: 'History',
+    27: 'Horror', 10402: 'Music',
+    9648: 'Mystery', 10749: 'Romance', 878: 'Sci-Fi', 10770: 'TV', 53: 'Thriller', 10752: 'War', 37: 'Western'
+}
+
+
+React.useEffect(function () {
+  // favoruites update -> new genre 
+  let temp = favourites.map((movie) => genreids[movie.genre_ids[0]])
+  console.log(temp)
+  // unique value hold
+  temp = new Set(temp);
+  setGenres(["All Genres", ...temp]);
+
+}, [favourites])
+
+function deleteFavMovie(){
+  console.log("Movies to be deleted")
+}
+
  //data from movies stored in local storage and getting that data into favourites arry using local storage....
   React.useEffect(function(){
        let favStrArr=localStorage.getItem("favourites")||"[]";
@@ -57,7 +82,7 @@ function Favourites() {
 
   let searchedMovie= searchText==""?favourites: filterLogic(searchText,favourites);
 
-  let ratedMovies= ratingOrder==null? searchedMovie: sortFavourites(ratingOrder,favourites);
+  let ratedMovies= ratingOrder==null? searchedMovie: sortFavourites(ratingOrder,searchedMovie);
 
   let sortByrateAndPop= popularityOrder==null?ratedMovies: sortByPop(popularityOrder,ratedMovies)
 
@@ -70,7 +95,7 @@ function Favourites() {
   return (
    <>
    <Header></Header>
-   <GennreBox genres={["Family",'action',"romance"]}></GennreBox>
+   <GenreBox genres={genres}></GenreBox>
 
    <div className='border_bottom'>
    <input type="text" value={searchText} onChange={setTextHandler} placeholder="Search"/>
@@ -86,8 +111,8 @@ function Favourites() {
 
           <th><i className="fa-solid fa-angle-up" onClick={()=>{setPopularityHandler(true)}}></i>Popularity<i className="fa-solid fa-angle-down" onClick={()=>{setPopularityHandler(false)}}></i></th>
 
-          {/* <th>Genre</th>
-          <th>Remove</th> */}
+          <th>Genre</th>
+          <th>Remove</th>
           </tr>
          
         </thead>
@@ -108,6 +133,8 @@ function Favourites() {
                 <td>
                 {movieobj.popularity}
                 </td>
+                <td></td>
+                <td><button style={{backgroundColor:"lightPink"}} onClick={deleteFavMovie}>Delete </button></td>
               </tr>
             )
 
@@ -131,20 +158,19 @@ function Favourites() {
   )
 }
 
-function GennreBox(props){
-  return(
-    <div className='flex border_bottom'>
-    <h4>All Genre</h4>
-    {props.genres.map((movieGenres,idx)=>{
-      return (
-        <div key={idx}>
-        <h3 > {movieGenres}</h3> 
-        </div>
-                
-      )
-    })}
-    </div>
-  ) 
+function GenreBox(props) {
+  return (
+      < div className="flex border-bottom"
+      >
+          
+          {props.genres.map((genre, idx) => {
+              return (
+                  <h4 key={idx}>{genre}</h4>
+              )
+          })}
+
+      </div >)
+
 }
 
 function sortFavourites(ratingOrder,favourites){
