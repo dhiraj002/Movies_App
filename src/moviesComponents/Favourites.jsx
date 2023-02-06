@@ -89,7 +89,7 @@ function deleteFavMovie(){
   //PAgination
   //currPage->pageNO.
   let sIdx=(currPage-1)*noOfElems;
-  let eIdx=sIdx+noOfElems;
+  let eIdx= Number (sIdx)+ Number(noOfElems);
   let paginatedResult=sortByrateAndPop.slice(sIdx,eIdx);
 
   return (
